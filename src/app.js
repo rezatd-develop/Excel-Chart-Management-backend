@@ -10,9 +10,17 @@ import { getAllTotals } from "./controllers/statics/getTotals.js";
 
 const app = express();
 
-console.log("CORS URL:", process.env.FRONTEND_URL);
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: (origin, callback) => {
+    console.log("REQUEST ORIGIN:", origin);
+
+    if (!origin || origin === process.env.FRONTEND_URL) {
+      callback(null, true);
+    } else {
+      console.log("BLOCKED ORIGIN:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
