@@ -14,7 +14,7 @@ console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
 const app = express();
 
 const corsOptions = {
-  origin: "https://excel-chart-management-frontend.vercel.app",
+  origin: process.env.FRONTEND_URL,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
