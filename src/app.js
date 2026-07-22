@@ -32,9 +32,9 @@ app.use(cors({
 app.use(express.json());
 connectDB();
 
-app.use(verifyToken);
 
 app.use("/api/auth", authRoutes);
+app.use(verifyToken);
 app.use("/api/files", filesRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.get("/api/files/:id/report/pdf", exportFileReportPdf);
