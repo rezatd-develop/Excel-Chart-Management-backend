@@ -13,28 +13,24 @@ console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
 
 const app = express();
 
-app.use(cors({
-  origin: (origin, callback) => {
-    console.log("REQUEST ORIGIN:", origin);
-
-    if (!origin || origin === process.env.FRONTEND_URL) {
-      callback(null, true);
-    } else {
-      console.log("BLOCKED ORIGIN:", origin);
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+const corsOptions = {
+  origin: "https://excel-chart-management-frontend.vercel.app",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
-}));
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
+
 connectDB();
 
-
 app.use("/api/auth", authRoutes);
+
 app.use(verifyToken);
+
 app.use("/api/files", filesRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.get("/api/files/:id/report/pdf", exportFileReportPdf);
