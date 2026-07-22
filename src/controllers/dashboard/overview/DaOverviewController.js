@@ -9,21 +9,24 @@ export const getFileChartData = async (req, res) => {
         const { range, start, end } = req.query;
 
         const file = await File.findById(id);
-        if (!file) return res.status(200).json(createResponseMessageClass(null, true, translations.fileNotFound));
+        if (!file)
+            return res.status(200).json(
+                createResponseMessageClass(null, true, translations.fileNotFound)
+            );
 
         const { labels, values } = filterAndGroupByTime(file.data, {
-            dateField: "تاریخ ثبت",
+            dateField: "Registration Date",
             range,
             start,
             end,
-            valueField: row => Number(row["خرید کل"]) || 0
+            valueField: row => Number(row["Total Purchase"]) || 0
         });
 
         const data = {
             labels,
             datasets: [
                 {
-                    label: "Total Price",
+                    label: "Total Purchase",
                     data: values,
                     borderColor: "#FF6384",
                     backgroundColor: "rgba(255, 99, 132, 0.5)",
@@ -35,33 +38,44 @@ export const getFileChartData = async (req, res) => {
         res.json(createResponseMessageClass(data, false, null));
     } catch (error) {
         console.error(error);
-        res.status(500).json(createResponseMessageClass(null, true, translations.errorGeneratingChart));
+        res
+            .status(500)
+            .json(createResponseMessageClass(null, true, translations.errorGeneratingChart));
     }
 };
 
 export const getFilePurchaseByCompany = async (req, res) => {
     try {
         const { id } = req.params;
+
         const file = await File.findById(id);
-        if (!file) return res.status(200).json(createResponseMessageClass(null, true, translations.fileNotFound));
+        if (!file)
+            return res.status(200).json(
+                createResponseMessageClass(null, true, translations.fileNotFound)
+            );
 
         const rows = file.data;
 
-        const mainCompanies = ["عمران ارگ", "روابط عمومی کرمان موتور", "کادک-طراحی قطعات"];
+        const mainCompanies = [
+            "Omran Arg",
+            "Kerman Motor Public Relations",
+            "KADEK - Parts Design"
+        ];
 
         const counts = {
-            "عمران ارگ": 0,
-            "روابط عمومی کرمان موتور": 0,
-            "کادک-طراحی قطعات": 0,
-            "سایر": 0
+            "Omran Arg": 0,
+            "Kerman Motor Public Relations": 0,
+            "KADEK - Parts Design": 0,
+            "Others": 0
         };
 
         rows.forEach(row => {
-            const company = row["نام شرکت"];
+            const company = row["Company Name"];
+
             if (mainCompanies.includes(company)) {
                 counts[company]++;
             } else {
-                counts["سایر"]++;
+                counts["Others"]++;
             }
         });
 
@@ -71,16 +85,22 @@ export const getFilePurchaseByCompany = async (req, res) => {
                 {
                     label: "Purchase Count by Company",
                     data: Object.values(counts),
-                    backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#AAAAAA"]
+                    backgroundColor: [
+                        "#FF6384",
+                        "#36A2EB",
+                        "#FFCE56",
+                        "#AAAAAA"
+                    ]
                 }
             ]
         };
 
         res.json(createResponseMessageClass(data, false, null));
-
     } catch (error) {
         console.error(error);
-        res.status(500).json(createResponseMessageClass(null, true, translations.errorGeneratingBookCountChart));
+        res
+            .status(500)
+            .json(createResponseMessageClass(null, true, translations.errorGeneratingBookCountChart));
     }
 };
 
@@ -90,14 +110,17 @@ export const getFileProfitChart = async (req, res) => {
         const { range, start, end } = req.query;
 
         const file = await File.findById(id);
-        if (!file) return res.status(200).json(createResponseMessageClass(null, true, translations.fileNotFound));
+        if (!file)
+            return res.status(200).json(
+                createResponseMessageClass(null, true, translations.fileNotFound)
+            );
 
         const { labels, values } = filterAndGroupByTime(file.data, {
-            dateField: "تاریخ ثبت",
+            dateField: "Registration Date",
             range,
             start,
             end,
-            valueField: row => Number(row["سود"] || 0)
+            valueField: row => Number(row["Profit"]) || 0
         });
 
         const data = {
@@ -127,7 +150,9 @@ export const getFileProfitChart = async (req, res) => {
         res.json(createResponseMessageClass(data, false, null));
     } catch (error) {
         console.error(error);
-        res.status(500).json(createResponseMessageClass(null, true, translations.errorGeneratingProfitChart));
+        res
+            .status(500)
+            .json(createResponseMessageClass(null, true, translations.errorGeneratingProfitChart));
     }
 };
 
@@ -137,24 +162,27 @@ export const getFileDiscountChart = async (req, res) => {
         const { range, start, end } = req.query;
 
         const file = await File.findById(id);
-        if (!file) return res.status(404).json(createResponseMessageClass(null, true, translations.fileNotFound));
+        if (!file)
+            return res.status(404).json(
+                createResponseMessageClass(null, true, translations.fileNotFound)
+            );
 
         const { labels, values } = filterAndGroupByTime(file.data, {
-            dateField: "تاریخ ثبت",
+            dateField: "Registration Date",
             range,
             start,
             end,
-            valueField: row => Number(row["کمیسیون/تخفیف"] || 0)
+            valueField: row => Number(row["Commission/Discount"]) || 0
         });
 
         const counts = filterAndGroupByTime(file.data, {
-            dateField: "تاریخ ثبت",
+            dateField: "Registration Date",
             range,
             start,
             end
         }).values;
 
-        const avgValues = values.map((v, i) => v / counts[i]);
+        const avgValues = values.map((value, index) => value / counts[index]);
 
         const data = {
             labels,
@@ -186,10 +214,11 @@ export const getFileDiscountChart = async (req, res) => {
         res.json(createResponseMessageClass(data, false, null));
     } catch (error) {
         console.error(error);
-        res.status(500).json(null, true, translations.errorGeneratingDiscountChart);
+        res
+            .status(500)
+            .json(createResponseMessageClass(null, true, translations.errorGeneratingDiscountChart));
     }
 };
-
 
 export const getSellerSales = async (req, res) => {
     try {
@@ -198,24 +227,36 @@ export const getSellerSales = async (req, res) => {
 
         const file = await File.findById(id);
         if (!file)
-            return res.status(200).json(createResponseMessageClass(null, true, translations.fileNotFound));
+            return res.status(200).json(
+                createResponseMessageClass(null, true, translations.fileNotFound)
+            );
 
         let rows = file.data;
 
         if (start && end) {
             const startDate = new Date(start);
             const endDate = new Date(end);
+
             rows = rows.filter(row => {
-                const date = new Date(row["تاریخ ثبت"]);
+                const date = new Date(row["Registration Date"]);
                 return date >= startDate && date <= endDate;
             });
         }
 
         const sellerSales = {};
+
         rows.forEach(row => {
-            const seller = row["seller"] || row["نام فروشنده"] || "ناشناس";
-            const amount = Number(row["خرید کل"]) || 0;
-            if (!sellerSales[seller]) sellerSales[seller] = 0;
+            const seller =
+                row["seller"] ||
+                row["Seller Name"] ||
+                "Unknown";
+
+            const amount = Number(row["Total Purchase"]) || 0;
+
+            if (!sellerSales[seller]) {
+                sellerSales[seller] = 0;
+            }
+
             sellerSales[seller] += amount;
         });
 
@@ -227,9 +268,10 @@ export const getSellerSales = async (req, res) => {
         result.sort((a, b) => b.amount - a.amount);
 
         res.json(createResponseMessageClass(result, false, null));
-
     } catch (error) {
         console.error(error);
-        res.status(500).json(createResponseMessageClass(null, true, translations.errorGeneratingChart));
+        res
+            .status(500)
+            .json(createResponseMessageClass(null, true, translations.errorGeneratingChart));
     }
 };

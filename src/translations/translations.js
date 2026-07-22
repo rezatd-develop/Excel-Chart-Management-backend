@@ -1,17 +1,27 @@
 export const translations = {
-    fileUpdatedSuccessfully: 'فایل با موفقیت بارگذاری شد',
-    usernameAlreadyExists: 'این نام کاربری از قبل وجود دارد.',
-    userRegisteredSuccessfully: 'کاربر با موفقیت ثبت شد',
-    signUpFailed: 'ثبت نام با مشکل مواجه شد',
-    userNotFound: 'کاربر پیدا نشد',
-    invalidCredentials: 'نام کاربری یا رمز اشتباه است.',
-    loginSuccessful: 'با موفقیت وارد شدید',
-    signInFailed: 'ورود با مشکل مواجه شد',
-    fileNotFound: 'فایل پیدا نشد',
-    errorGeneratingChart: 'ایجاد نمودار با مشکل مواجه شد',
-    errorGeneratingBookCountChart: 'ایجاد نمودار تعداد سفارش با مشکل مواجه شد.',
-    errorGeneratingProfitChart: 'ایجاد نمودار سود با مشکل مواجه شد',
-    errorGeneratingDiscountChart: 'ایجاد نمودار تخفیف با مشکل مواجه شد',
-    errorGeneratingServiceChart: 'ایجاد نمودار خدمات با مشکل مواجه شد'
+    fileUpdatedSuccessfully: "File uploaded successfully.",
 
-}
+    usernameAlreadyExists: "This username already exists.",
+    userRegisteredSuccessfully: "User registered successfully.",
+    signUpFailed: "Registration failed.",
+
+    userNotFound: "User not found.",
+    invalidCredentials: "Invalid username or password.",
+    loginSuccessful: "Login successful.",
+    signInFailed: "Login failed.",
+
+    fileNotFound: "File not found.",
+    noFilesFound: "No files found.",
+
+    success: "Operation completed successfully.",
+    errorOccurred: "An unexpected error occurred.",
+
+    noFileUploaded: "No file was uploaded.",
+    errorUploadingFile: "Error uploading file.",
+
+    errorGeneratingChart: "Error generating chart.",
+    errorGeneratingBookCountChart: "Error generating purchase count chart.",
+    errorGeneratingProfitChart: "Error generating profit chart.",
+    errorGeneratingDiscountChart: "Error generating discount chart.",
+    errorGeneratingServiceChart: "Error generating service chart."
+};
