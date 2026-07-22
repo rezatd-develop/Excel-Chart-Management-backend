@@ -8,6 +8,9 @@ import { verifyToken } from "./middlewares/authMiddleware.js";
 import { exportFileReportPdf } from "./controllers/reportController.js";
 import { getAllTotals } from "./controllers/statics/getTotals.js";
 
+console.log("========== APP LOADED ==========");
+console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+
 const app = express();
 
 app.use(cors({
